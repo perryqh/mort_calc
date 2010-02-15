@@ -10,9 +10,9 @@ require 'spec/rake/spectask'
 
 Echoe.new("mortgage_calc", MortgageCalc::VERSION) do |p|
   p.description = "Mortgage utilities"
-  p.url = "http://github.com/pathfinderdev/mortgage_calc"
+  p.url = "http://github.com/perry3819/mortgage_calc"
   p.author = "Perry Hertler"
-  p.email = "phertler@pathf.com"
+  p.email = "perry@hertler.org"
   p.ignore_pattern = ["tmp/*", "script/*, .idea/*"]
   p.development_dependencies = []
 end
