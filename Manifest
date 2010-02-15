@@ -1,3 +1,4 @@
+Manifest
 README.rdoc
 Rakefile
 Version.yml
@@ -8,4 +9,3 @@ lib/mortgage_calc.rb
 lib/mortgage_calc/mortgage_util.rb
 spec/mortgage_calc/mortgage_util_spec.rb
 spec/spec_helper.rb
-Manifest

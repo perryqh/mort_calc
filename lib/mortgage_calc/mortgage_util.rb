@@ -56,16 +56,16 @@ module MortgageCalc
 
     # if 'start' is the monthly_interest_rate, Newton Raphson will find the apr root very quickly
     # k1 = k0 - f(k0)/f'(k0)
-    # k_plus_one = k - f(k)/f_slope(k)
+    # k_plus_one = k - f(k)/f_deriv(k)
     # We find the k-intercept of the tangent line at point k_plus_one and compare k to k_plus_one.
     # This is repeated until a sufficiently accurate value is reached, which can be specified with the 'precision' parameter
-    def newton_raphson(f, f_slope, start, precision = 5)
+    def newton_raphson(f, f_deriv, start, precision = 5)
       k_plus_one = start
       k = 0.0
 
       while ((k - 1) * 10**precision).to_f.floor !=  ((k_plus_one - 1) * 10**precision).to_f.floor
         k = k_plus_one
-        k_plus_one = k - f.call(k) / f_slope.call(k)
+        k_plus_one = k - f.call(k) / f_deriv.call(k)
       end
       k_plus_one
     end
