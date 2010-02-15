@@ -1,0 +1,47 @@
+= mortgage_calc
+
+Calculates mortgage APR, monthly payments, and fees.
+
+== INSTALL
+  $ sudo gem install gemcutter
+  $ gem tumble
+  $ sudo gem install mortgage_calc
+or add the following to your <b>environment.rb</b>
+  config.gem 'mortgage_calc'
+
+==Example:
+    loan_amount = 350000
+    interest_rate = 4.75
+    period = 30 * 12
+    lender_fee = 800
+    points = 1.0
+
+    mort_calc = MortgageCalc::MortgageUtil.new(loan_amount, interest_rate, period, lender_fee, points)
+    
+    mort_calc.apr
+    mort_calc.monthly_payment
+    mort_calc.monthly_payment_with_fees
+    mort_calc.total_fees
+
+==Formulas used
+===Monthly payment with fees
+    P = [(C + E) r (1 + r)^N]/[(1 + r)^N - 1]
+
+    P = monthly payment
+    C = Loan amount
+    r = Interest rate
+    N = Period in months
+    E = Lender fees
+
+===Monthly payment without fees is calculated like above with E = 0.
+
+===APR
+    [a (1 + a)^N] / [(1 + a)^N - 1] - P/C = 0
+    a = A/1200
+    N = Period in months
+    P = Monthly payment
+    C = Loan amount
+
+===Total fees
+Total fees are calculated simply by adding Lender fees to the points paid by borrower.
+    T = E + P(C)
