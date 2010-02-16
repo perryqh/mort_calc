@@ -41,16 +41,15 @@ module MortgageCalc
     end
 
     # solves APR
-    # where a = APR/1200, N = period, P = monthly payment, C = loan_amount
     # [a (1 + a)^N] / [(1 + a)^N - 1] - P/C = 0
+    # where a = APR/1200, N = period, P = monthly payment, C = loan_amount
     # calculate APR uses the Newton-Raphson to find the root (the value for 'a' that makes f(a) = 0)
-    # for best performance call this with 'start'= interest rate
     def calculate_apr
       payment_ratio = monthly_payment_with_fees / loan_amount
       f = lambda {|k| (k**(self.period + 1) - (k**self.period * (payment_ratio + 1)) + payment_ratio)}
-      f_slope = lambda { |k| ((self.period + 1) * k**self.period) - (self.period * (payment_ratio + 1) * k**(self.period - 1))}
+      f_deriv = lambda { |k| ((self.period + 1) * k**self.period) - (self.period * (payment_ratio + 1) * k**(self.period - 1))}
 
-      root = newton_raphson(f, f_slope, monthly_interst_rate + 1)
+      root = newton_raphson(f, f_deriv, monthly_interst_rate + 1)
       100 * 12 * (root - 1).to_f
     end
 
@@ -59,6 +58,7 @@ module MortgageCalc
     # k_plus_one = k - f(k)/f_deriv(k)
     # We find the k-intercept of the tangent line at point k_plus_one and compare k to k_plus_one.
     # This is repeated until a sufficiently accurate value is reached, which can be specified with the 'precision' parameter
+    # for best performance call this with 'start'= interest rate
     def newton_raphson(f, f_deriv, start, precision = 5)
       k_plus_one = start
       k = 0.0
