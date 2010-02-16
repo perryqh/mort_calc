@@ -58,7 +58,6 @@ module MortgageCalc
     # k_plus_one = k - f(k)/f_deriv(k)
     # We find the k-intercept of the tangent line at point k_plus_one and compare k to k_plus_one.
     # This is repeated until a sufficiently accurate value is reached, which can be specified with the 'precision' parameter
-    # for best performance call this with 'start'= interest rate
     def newton_raphson(f, f_deriv, start, precision = 5)
       k_plus_one = start
       k = 0.0
