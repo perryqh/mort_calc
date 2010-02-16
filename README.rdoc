@@ -1,5 +1,7 @@
 = mortgage_calc
 
+http://www.pathf.com/blogs/2010/02/mortcalc-gem/
+
 Calculates mortgage APR, monthly payments, and fees.
 
 == INSTALL
