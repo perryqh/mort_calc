@@ -7,5 +7,6 @@ features/step_definitions/apr_steps.rb
 features/support/env.rb
 lib/mortgage_calc.rb
 lib/mortgage_calc/mortgage_util.rb
+mortgage_calc.gemspec
 spec/mortgage_calc/mortgage_util_spec.rb
 spec/spec_helper.rb

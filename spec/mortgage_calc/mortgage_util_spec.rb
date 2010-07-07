@@ -40,8 +40,14 @@ module MortgageCalc
       @mortgage_util =  MortgageUtil.new(100000, 6.0, 360, 1200, -11.25)
       @mortgage_util.total_fees.should be 0
     end
-    it "calculate total fees should return 0 if total fees is less than 0" do
-       @mortgage_util.send(:calculate_total_fees).should be 0
+    it "calculate total fees should return actual total fees is less than 0" do
+       @mortgage_util.send(:calculate_total_fees).should eql -10050.0
+    end
+    it "total fees should return 0 if total fees is less than 0" do
+       @mortgage_util.total_fees(false).should eql 0
+    end
+      it "total fees should return actual fees if negative parameter is true" do
+       @mortgage_util.total_fees(true).should eql -10050.0
     end
     it "should not return APR less than interest rate" do
       @mortgage_util.apr.should be_close 6.0, 0.00000001
