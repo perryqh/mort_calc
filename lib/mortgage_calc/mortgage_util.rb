@@ -1,12 +1,12 @@
 module MortgageCalc
   class MortgageUtil
-    attr_accessor :loan_amount, :interest_rate, :period, :lender_fee, :points
+    attr_accessor :loan_amount, :interest_rate, :period, :fees, :points
 
-    def initialize(loan_amount, interest_rate, period=360, lender_fee=0, points=0.0)
+    def initialize(loan_amount, interest_rate, period=360, fees=0, points=0.0)
       self.loan_amount = Float(loan_amount.to_s)
       self.interest_rate = Float(interest_rate.to_s)
       self.period = Integer(period.to_s)
-      self.lender_fee = lender_fee
+      self.fees = fees
       self.points = Float(points.to_s)
     end
 
@@ -15,11 +15,11 @@ module MortgageCalc
     end
 
     def monthly_payment
-      @monthly_payment ||= calculate_monthly_payment(self.loan_amount, monthly_interst_rate, self.period)
+      @monthly_payment ||= calculate_monthly_payment(self.loan_amount, monthly_interest_rate, self.period)
     end
 
     def monthly_payment_with_fees
-      @monthly_payment_with_fees ||= calculate_monthly_payment(self.loan_amount + total_fees, monthly_interst_rate, self.period)
+      @monthly_payment_with_fees ||= calculate_monthly_payment(self.loan_amount + total_fees, monthly_interest_rate, self.period)
     end
 
     def total_fees
@@ -27,7 +27,7 @@ module MortgageCalc
     end
 
     private
-    def monthly_interst_rate
+    def monthly_interest_rate
       self.interest_rate / 100 / 12
     end
 
@@ -36,8 +36,7 @@ module MortgageCalc
     end
 
     def calculate_total_fees
-      buyer_points = self.points <= 0 ? 0 : self.points
-      self.lender_fee + (self.loan_amount * buyer_points.abs/100)
+      self.fees + (self.loan_amount * points/100)
     end
 
     # solves APR
@@ -49,7 +48,7 @@ module MortgageCalc
       f = lambda {|k| (k**(self.period + 1) - (k**self.period * (payment_ratio + 1)) + payment_ratio)}
       f_deriv = lambda { |k| ((self.period + 1) * k**self.period) - (self.period * (payment_ratio + 1) * k**(self.period - 1))}
 
-      root = newton_raphson(f, f_deriv, monthly_interst_rate + 1)
+      root = newton_raphson(f, f_deriv, monthly_interest_rate + 1)
       100 * 12 * (root - 1).to_f
     end
 

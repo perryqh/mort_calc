@@ -1,5 +1,4 @@
-require File.join(File.dirname(__FILE__), "..", "spec_helper")
-
+require File.dirname(__FILE__) + '/../spec_helper'
 module MortgageCalc
   describe MortgageUtil do
     def assert_monthly_apr_payment_matches(loan_amount, rate, period, fee, points)
@@ -15,7 +14,7 @@ module MortgageCalc
         @mortgage_util_with_apr_as_rate = MortgageUtil.new(100000, @mortgage_util.apr, 360, 1200, 1.25)
       end
       it "should have proper monthly interest rate" do
-        @mortgage_util.send(:monthly_interst_rate).should == 0.005
+        @mortgage_util.send(:monthly_interest_rate).should == 0.005
       end
       it "should have proper monthly payment" do
         @mortgage_util.monthly_payment.should be_close(599.55, 0.001)
@@ -35,12 +34,14 @@ module MortgageCalc
       assert_monthly_apr_payment_matches(300000, 6.5, 360, 10000, 7.25)
     end
   end
-  context "ignore lender points paid to broker" do
+
+  context "do not ignore lender points paid to broker" do
     it "the fee should not include negative points" do
       mortgage_util = MortgageUtil.new(100000, 6.0, 360, 1200, -1.25)
-      1200.should == mortgage_util.total_fees
+      -50.should == mortgage_util.total_fees
     end
   end
+
   context "initialize convert to best types" do
     before(:all) do
       @mortgage_util =  MortgageUtil.new('100000', '6.0', 360, 1200, '-1.25')
