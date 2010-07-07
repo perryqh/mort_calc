@@ -36,7 +36,9 @@ module MortgageCalc
     end
 
     def calculate_total_fees
-      self.fees + (self.loan_amount * points/100)
+      total = self.fees + (self.loan_amount * points/100)
+      #fees may not be negative (borrower is not paid)
+      total < 0 ? 0 : total
     end
 
     # solves APR

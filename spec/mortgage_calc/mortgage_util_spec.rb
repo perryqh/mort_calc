@@ -35,10 +35,16 @@ module MortgageCalc
     end
   end
 
-  context "do not ignore lender points paid to broker" do
-    it "the fee should not include negative points" do
-      mortgage_util = MortgageUtil.new(100000, 6.0, 360, 1200, -1.25)
-      -50.should == mortgage_util.total_fees
+  context "net negative fees" do
+     before(:all) do
+      @mortgage_util =  MortgageUtil.new(100000, 6.0, 360, 1200, -11.25)
+      @mortgage_util.total_fees.should be 0
+    end
+    it "calculate total fees should return 0 if total fees is less than 0" do
+       @mortgage_util.send(:calculate_total_fees).should be 0
+    end
+    it "should not return APR less than interest rate" do
+      @mortgage_util.apr.should be_close 6.0, 0.00000001
     end
   end
 
@@ -47,7 +53,7 @@ module MortgageCalc
       @mortgage_util =  MortgageUtil.new('100000', '6.0', 360, 1200, '-1.25')
     end
     it "should convert rate to float if necessary" do
-       @mortgage_util.interest_rate.class.should == Float
+      @mortgage_util.interest_rate.class.should == Float
     end
     it "should convert points to float if necessary" do
       @mortgage_util.points.class.should == Float
